@@ -1,9 +1,7 @@
 import { IsNotEmpty } from 'class-validator';
-import { Column, Entity, PrimaryGeneratedColumn,} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'tb_Produto' })
-
-
 export class Produto {
   @PrimaryGeneratedColumn()
   id: number;
@@ -13,14 +11,20 @@ export class Produto {
   nome: string;
 
   @IsNotEmpty()
-  @Column({ type:"int", nullable: false })
+  @Column({ type: 'int', nullable: false })
   quantidade: number;
 
   @IsNotEmpty()
-  @Column( { precision: 19, scale: 4, nullable: false, type: 'decimal',transformer: {
+  @Column({
+    precision: 19,
+    scale: 4,
+    nullable: false,
+    type: 'decimal',
+    transformer: {
       to: (value: number) => value, // quando salva no banco
       from: (value: string) => parseFloat(value), // quando lê do banco
-    }, })
+    },
+  })
   preco: number;
 
   @IsNotEmpty()
