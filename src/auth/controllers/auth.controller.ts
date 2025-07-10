@@ -15,7 +15,7 @@ import { UsuarioLogin } from './../entities/usuariologin.entity';
 @Controller('/usuarios')
 export class AuthController {
   constructor(private authService: AuthService) {}
-
+  // COMENTÁRIO
   @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Post('/logar')
