@@ -1,5 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CategoriaService } from 'src/categoria/services/categoria.service';
+import { UsuarioService } from 'src/usuario/services/usuario.service';
 import { DeleteResult, ILike, Repository } from 'typeorm';
 import { Produto } from '../entities/produto.entity';
 
@@ -8,10 +13,17 @@ export class ProdutoService {
   constructor(
     @InjectRepository(Produto)
     private produtoRepository: Repository<Produto>,
-  ) {}
+    private categoriaService: CategoriaService,
+    private usuarioService: UsuarioService
+  ) { }
 
   async findAll(): Promise<Produto[]> {
-    return await this.produtoRepository.find({});
+    return await this.produtoRepository.find({
+      relations: {
+        categoria: true,
+        usuario: true
+      }
+    });
   }
 
   async findById(id: number): Promise<Produto> {
@@ -19,6 +31,10 @@ export class ProdutoService {
       where: {
         id,
       },
+      relations: {
+        categoria: true,
+        usuario: true
+      }
     });
 
     if (!produto)
@@ -32,6 +48,10 @@ export class ProdutoService {
       where: {
         nome: ILike(`%${nome}%`),
       },
+      relations: {
+        categoria: true,
+        usuario: true
+      }
     });
   }
 

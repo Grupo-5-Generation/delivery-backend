@@ -1,5 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { IsEmail, IsNotEmpty, MinLength } from "class-validator";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from "typeorm";
+import { Produto } from "src/produto/entities/produto.entity";
 
 
 @Entity({ name: "tb_usuario" })
@@ -30,7 +33,7 @@ export class Usuario {
     foto: string
 
     // @ApiProperty()
-    // @OneToMany(() => Produto, (produto) => produto.usuario)
-    // produto: Produto[]
+    @OneToMany(() => Produto, (produto) => produto.usuario)
+    produto: Produto[]
 
 }

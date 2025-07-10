@@ -1,16 +1,19 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, ILike, DeleteResult } from 'typeorm';
+import { DeleteResult, ILike, Repository } from 'typeorm';
 //import { Bcrypt } from '../../auth/bcrypt/bcrypt';
 import { Usuario } from '../entities/usuario.entity';
 
 @Injectable()
 export class UsuarioService {
-    
+
     constructor(
         @InjectRepository(Usuario)
         private usuarioRepository: Repository<Usuario>,
-       // private bcrypt: Bcrypt,
+        // private bcrypt: Bcrypt,
     ) { }
 
     async findByNome(nome: string): Promise<Usuario[]> {
@@ -18,14 +21,17 @@ export class UsuarioService {
             where: {
                 nome: ILike(`%${nome}%`)
             },
+            relations: {
+                produto: true
+            }
         });
     }
 
     async findAll(): Promise<Usuario[]> {
         return await this.usuarioRepository.find({
-            // relations: {
-            //     produto: true,
-            // },
+            relations: {
+                produto: true,
+            },
         });
     }
 
@@ -34,9 +40,9 @@ export class UsuarioService {
             where: {
                 id,
             },
-            // relations: {
-            //     produto: true,
-            // },
+            relations: {
+                produto: true,
+            },
         });
 
         if (!usuario)
@@ -66,12 +72,12 @@ export class UsuarioService {
                 HttpStatus.BAD_REQUEST,
             );
 
-       // usuario.senha = await this.bcrypt.criptografarSenha(usuario.senha);
+        // usuario.senha = await this.bcrypt.criptografarSenha(usuario.senha);
         return await this.usuarioRepository.save(usuario);
     }
 
     async delete(id: number): Promise<DeleteResult> {
         await this.findById(id);
         return await this.usuarioRepository.delete(id);
-  }
+    }
 }

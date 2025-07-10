@@ -1,5 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { IsNotEmpty } from 'class-validator';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Categoria } from 'src/categoria/entities/categoria.entity';
+import { Usuario } from 'src/usuario/entities/usuario.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'tb_Produto' })
 export class Produto {
@@ -30,4 +34,16 @@ export class Produto {
   @IsNotEmpty()
   @Column({ nullable: false })
   status: boolean;
+
+  @ManyToOne(() => Categoria, (categoria) => categoria.produto, {
+    onDelete: "CASCADE"
+  })
+  categoria: Categoria
+
+  @ManyToOne(() => Usuario, (usuario) => usuario.produto, {
+    onDelete: "CASCADE"
+  })
+  usuario: Usuario
 }
+
+

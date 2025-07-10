@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DeleteResult, ILike, Repository } from "typeorm";
@@ -12,9 +15,9 @@ export class CategoriaService {
 
     async findAll(): Promise<Categoria[]> {
         return await this.categoriaRepository.find({
-            // relations: {
-            //     produto: true,
-            // },
+            relations: {
+                produto: true,
+            },
         });
     }
 
@@ -24,9 +27,9 @@ export class CategoriaService {
             where: {
                 id
             },
-            // relations: {
-            //     produto: true
-            // }
+            relations: {
+                produto: true
+            }
         });
 
         if (!categoria)
@@ -40,9 +43,9 @@ export class CategoriaService {
             where: {
                 tipo: ILike(`%${tipo}%`)
             },
-            // relations: {
-            //     produto: true
-            // }
+            relations: {
+                produto: true
+            }
         })
     }
 

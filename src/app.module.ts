@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Produto } from './Produto/entities/produto.entity';
-import { ProdutoModule } from './Produto/produto.module';
+import { Produto } from './produto/entities/produto.entity';
+import { ProdutoModule } from './produto/produto.module';
 import { CategoriaModule } from './categoria/categoria.module';
 import { Categoria } from './categoria/entities/categoria.entity';
 import { Usuario } from './usuario/entities/usuario.entity';
