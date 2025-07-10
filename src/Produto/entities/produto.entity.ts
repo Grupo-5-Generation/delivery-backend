@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { IsNotEmpty } from 'class-validator';
 import { Categoria } from 'src/categoria/entities/categoria.entity';
 import { Usuario } from 'src/usuario/entities/usuario.entity';
@@ -36,14 +34,12 @@ export class Produto {
   status: boolean;
 
   @ManyToOne(() => Categoria, (categoria) => categoria.produto, {
-    onDelete: "CASCADE"
+    onDelete: 'CASCADE',
   })
-  categoria: Categoria
+  categoria: Categoria;
 
   @ManyToOne(() => Usuario, (usuario) => usuario.produto, {
-    onDelete: "CASCADE"
+    onDelete: 'CASCADE',
   })
-  usuario: Usuario
+  usuario: Usuario;
 }
-
-

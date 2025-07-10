@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Produto } from './produto/entities/produto.entity';
-import { ProdutoModule } from './produto/produto.module';
+import { Produto } from './Produto/entities/produto.entity';
+import { ProdutoModule } from './Produto/produto.module';
 import { CategoriaModule } from './categoria/categoria.module';
 import { Categoria } from './categoria/entities/categoria.entity';
 import { Usuario } from './usuario/entities/usuario.entity';
@@ -17,8 +17,7 @@ import { UsuarioModule } from './usuario/usuario.module';
       password: 'root',
       database: 'db_delivery',
       entities: [Categoria, Usuario, Produto],
-      synchronize: true,
-      logging: true,
+      synchronize: false,
     }),
     CategoriaModule,
     UsuarioModule,
@@ -27,4 +26,4 @@ import { UsuarioModule } from './usuario/usuario.module';
   controllers: [],
   providers: [],
 })
-export class AppModule { }
+export class AppModule {}

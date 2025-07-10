@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CategoriaService } from 'src/categoria/services/categoria.service';
@@ -14,15 +11,15 @@ export class ProdutoService {
     @InjectRepository(Produto)
     private produtoRepository: Repository<Produto>,
     private categoriaService: CategoriaService,
-    private usuarioService: UsuarioService
-  ) { }
+    private usuarioService: UsuarioService,
+  ) {}
 
   async findAll(): Promise<Produto[]> {
     return await this.produtoRepository.find({
       relations: {
         categoria: true,
-        usuario: true
-      }
+        usuario: true,
+      },
     });
   }
 
@@ -33,8 +30,8 @@ export class ProdutoService {
       },
       relations: {
         categoria: true,
-        usuario: true
-      }
+        usuario: true,
+      },
     });
 
     if (!produto)
@@ -50,8 +47,8 @@ export class ProdutoService {
       },
       relations: {
         categoria: true,
-        usuario: true
-      }
+        usuario: true,
+      },
     });
   }
 

@@ -10,12 +10,13 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ProdutoService } from 'src/produto/services/produto.service';
+
 import { Produto } from '../entities/produto.entity';
+import { ProdutoService } from '../services/produto.service';
 
 @Controller('/produto')
 export class ProdutoController {
-  constructor(private readonly produtoService: ProdutoService) { }
+  constructor(private readonly produtoService: ProdutoService) {}
 
   @Get()
   @HttpCode(HttpStatus.OK)
