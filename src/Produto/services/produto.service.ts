@@ -5,6 +5,14 @@ import { UsuarioService } from 'src/usuario/services/usuario.service';
 import { DeleteResult, ILike, Repository } from 'typeorm';
 import { Produto } from '../entities/produto.entity';
 
+interface FiltroProduto {
+  precoAtual?: number;
+  precoAnterior?: number;
+  desconto?: number;
+  categoriaId?: number;
+  nome?: string;
+}
+
 @Injectable()
 export class ProdutoService {
   constructor(
@@ -49,6 +57,75 @@ export class ProdutoService {
         categoria: true,
         usuario: true,
       },
+    });
+  }
+
+  async findProdutoSaudavel(id: number): Promise<Produto> {
+    const produto: Produto = await this.findById(id);
+
+    if (!produto) {
+      throw new HttpException('Produto não encontrado!', HttpStatus.NOT_FOUND);
+    }
+
+    if (produto.categoria?.tipo !== 'Produto saudável') {
+      throw new HttpException(
+        'Este produto não pertence à categoria Produto saudável.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    produto.precoAnterior = produto.precoAtual;
+    produto.desconto = produto.precoAtual * 0.1;
+    produto.precoAtual = produto.precoAnterior - produto.desconto;
+
+    return await this.produtoRepository.save(produto);
+  }
+
+  async filtrarProdutos(filtro: FiltroProduto): Promise<Produto[]> {
+    const queryBuilder = this.produtoRepository
+      .createQueryBuilder('produto')
+      .leftJoinAndSelect('produto.categoria', 'categoria');
+
+    if (filtro.nome) {
+      queryBuilder.andWhere('produto.nome LIKE :nome', {
+        nome: `%${filtro.nome}%,`,
+      });
+    }
+
+    if (filtro.precoAtual !== undefined) {
+      queryBuilder.andWhere('produto.precoAtual >= :precoAtual', {
+        precoAtual: filtro.precoAtual,
+      });
+    }
+
+    if (filtro.precoAnterior !== undefined) {
+      queryBuilder.andWhere('produto.precoAnterior <= :precoAnterior', {
+        precoAnterior: filtro.precoAnterior,
+      });
+    }
+
+    if (filtro.desconto !== undefined) {
+      queryBuilder.andWhere('produto.desconto >= :desconto', {
+        desconto: filtro.desconto,
+      });
+    }
+
+    if (filtro.categoriaId !== undefined) {
+      queryBuilder.andWhere('produto.categoriaId = :categoriaId', {
+        categoriaId: filtro.categoriaId,
+      });
+    }
+
+    return queryBuilder.getMany();
+  }
+
+  async produtosMaisVendidos(limit = 10): Promise<Produto[]> {
+    return this.produtoRepository.find({
+      order: {
+        precoAtual: 'DESC',
+      },
+      take: limit,
+      relations: ['categoria'],
     });
   }
 

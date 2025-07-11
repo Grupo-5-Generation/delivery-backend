@@ -25,6 +25,34 @@ export class Produto {
   @Column({
     precision: 19,
     scale: 4,
+    nullable: true,
+    type: 'decimal',
+    transformer: {
+      to: (value: number) => value, // quando salva no banco
+      from: (value: string) => parseFloat(value), // quando lê do banco
+    },
+  })
+  precoAnterior: number;
+
+  @IsNotEmpty()
+  @ApiProperty()
+  @Column({
+    precision: 19,
+    scale: 4,
+    nullable: true,
+    type: 'decimal',
+    transformer: {
+      to: (value: number) => value, // quando salva no banco
+      from: (value: string) => parseFloat(value), // quando lê do banco
+    },
+  })
+  desconto: number;
+
+  @IsNotEmpty()
+  @ApiProperty()
+  @Column({
+    precision: 19,
+    scale: 4,
     nullable: false,
     type: 'decimal',
     transformer: {
@@ -32,7 +60,7 @@ export class Produto {
       from: (value: string) => parseFloat(value), // quando lê do banco
     },
   })
-  preco: number;
+  precoAtual: number;
 
   @IsNotEmpty()
   @ApiProperty()

@@ -56,7 +56,7 @@ export class UsuarioService {
   }
 
   async create(usuario: Usuario): Promise<Usuario> {
-    const buscaUsuario = await this.findByUsuario(usuario.nome);
+    const buscaUsuario = await this.findByUsuario(usuario.usuario);
 
     if (buscaUsuario)
       throw new HttpException('O Usuario já existe!', HttpStatus.BAD_REQUEST);
