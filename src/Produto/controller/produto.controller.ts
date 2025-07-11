@@ -77,8 +77,10 @@ export class ProdutoController {
 
   @Get('/mais-vendidos/:limit')
   @HttpCode(HttpStatus.OK)
-  getMaisVendidos(@Query('limit') limit = 10): Promise<Produto[]> {
-    return this.produtoService.produtosMaisVendidos(Number(limit));
+  getMaisVendidos(
+    @Param('limit', ParseIntPipe) limit: number,
+  ): Promise<Produto[]> {
+    return this.produtoService.produtosMaisVendidos(limit);
   }
 
   @Put()
