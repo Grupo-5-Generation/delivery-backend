@@ -7,10 +7,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
-    .setTitle('Blog Pessoal')
+    .setTitle('Terminal Gourmet')
     .setDescription('Projeto Delivery - Turma JS-07 Generation Brasil')
     .setContact(
-      'Andressa Muniz, Douglas Ferreira, Giovanna Colombara, Giulia Barreto, Mariana Oliveira, Matheus Camargo e Ysabella Santos',
+      'Andressa Muniz, Douglas Ferreira, Giovanna Colombara, Giulia Barreto, Mariana Oliveira, Mateus Camargo e Ysabella Santos',
       'https://github.com/Grupo-5-Generation/delivery-backend',
       'grupo05.generation@gmail.com',
     )
