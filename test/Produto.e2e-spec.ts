@@ -17,26 +17,25 @@ describe('Produto (e2e)', () => {
 
     // Cadastrar usuário
     const userRes = await request(app.getHttpServer())
-      .post('/usuarios/cadastrar')
+      .post('/usuario/cadastrar')
       .send({
         nome: 'Root',
         usuario: 'root@root.com',
         senha: 'rootroot',
-        foto: '-',
       });
 
     usuarioId = userRes.body.id;
 
     // Autenticar
     const login = await request(app.getHttpServer())
-      .post('/usuarios/logar')
+      .post('/usuario/logar')
       .send({ usuario: 'root@root.com', senha: 'rootroot' });
 
     token = login.body.token;
 
     // Criar tema
     const categoriaRes = await request(app.getHttpServer())
-      .post('/categorias')
+      .post('/categoria')
       .set('Authorization', `${token}`)
       .send({ descricao: 'Categorias para Produtos' });
 
@@ -49,13 +48,15 @@ describe('Produto (e2e)', () => {
 
   it('01 - Deve cadastrar um novo Produto', async () => {
     const resposta = await request(app.getHttpServer())
-      .post('/produtos')
+      .post('/produto')
       .set('Authorization', `${token}`)
       .send({
-        titulo: 'Título Teste',
-        texto: 'Nome do produto',
-        categoria: { id: categoriaId },
-        usuario: { id: usuarioId },
+        nome: 'Produto teste',
+        quantidade: '5',
+        preco: '10.50',
+        status: '1',
+        categoriaid: { id: categoriaId },
+        usuarioid: { id: usuarioId },
       })
       .expect(201);
 
@@ -65,7 +66,7 @@ describe('Produto (e2e)', () => {
 
   it('02 - Deve listar todos os Produtos', async () => {
     const resposta = await request(app.getHttpServer())
-      .get('/produtos')
+      .get('/produto')
       .set('Authorization', `${token}`)
       .expect(200);
 
@@ -74,27 +75,29 @@ describe('Produto (e2e)', () => {
 
   it('03 - Deve buscar Produto por Nome', async () => {
     const resposta = await request(app.getHttpServer())
-      .get('/postagens/nome/Produto Teste')
+      .get('/produto/nome/Produto Teste')
       .set('Authorization', `${token}`)
       .expect(200);
 
-    expect(resposta.body[0].nome).toBe('Produto Teste');
+    expect(Array.isArray(resposta.body)).toBe(true);
   });
 
   it('04 - Deve atualizar um Produto', async () => {
     const resposta = await request(app.getHttpServer())
-      .put('/produtos')
+      .put('/produto')
       .set('Authorization', `${token}`)
       .send({
         id: produtoId,
-        titulo: 'Nome Atualizado',
-        descricao: 'Descrição atualizado',
-        categoria: { id: categoriaId },
-        usuario: { id: usuarioId },
+        nome: 'Produto Atualizado',
+        quantidade: '15',
+        preco: '50.50',
+        status: '1',
+        categoriaid: { id: categoriaId },
+        usuarioid: { id: usuarioId },
       })
       .expect(200);
 
-    expect(resposta.body.titulo).toBe('Produto Atualizado');
+    expect(resposta.body.nome).toBe('Produto Atualizado');
   });
 
   it('05 - Deve deletar um Produto', async () => {

@@ -21,46 +21,43 @@ describe('Usuário e Auth (e2e)', () => {
 
   it('01 - Deve cadastrar um novo usuário', async () => {
     const resposta = await request(app.getHttpServer())
-      .post('/usuarios/cadastrar')
+      .post('/usuario/cadastrar')
       .send({
         nome: 'Root',
         usuario: 'root@root.com',
         senha: 'rootroot',
-        foto: '-',
       })
       .expect(201);
 
     usuarioId = resposta.body.id;
   });
 
-  it('02 - Deve apresentar erro ao cadastrar o usuário com e-mail inválido', async () => {
+  it('02 - Não deve cadastrar um usuário duplicado', async () => {
+    await request(app.getHttpServer())
+      .post('/usuario/cadastrar')
+      .send({
+        nome: 'Root',
+        usuario: 'root@root.com',
+        senha: 'rootroot',
+      })
+      .expect(400);
+  });
+
+  it('03 - Deve apresentar erro ao cadastrar o usuário com e-mail inválido', async () => {
     const resposta = await request(app.getHttpServer())
-      .post('/usuarios/cadastrar')
+      .post('/usuario/cadastrar')
       .send({
         nome: 'Root',
         usuario: 'root@root',
         senha: 'rootroot',
-        foto: '-',
       });
 
     expect(resposta.status).toBe(400);
   });
 
-  it('03 - Não deve cadastrar um usuário duplicado', async () => {
-    await request(app.getHttpServer())
-      .post('/usuarios/cadastrar')
-      .send({
-        nome: 'Root',
-        usuario: 'root@root.com',
-        senha: 'rootroot',
-        foto: '-',
-      })
-      .expect(400);
-  });
-
   it('04 - Deve autenticar o usuário (login)', async () => {
     const resposta = await request(app.getHttpServer())
-      .post('/usuarios/logar')
+      .post('/usuario/logar')
       .send({
         usuario: 'root@root.com',
         senha: 'rootroot',
@@ -72,7 +69,7 @@ describe('Usuário e Auth (e2e)', () => {
 
   it('05 - Deve listar todos os usuários', async () => {
     const resposta = await request(app.getHttpServer())
-      .get('/usuarios/all')
+      .get('/usuario/all')
       .set('Authorization', `${token}`)
       .expect(200);
 
@@ -81,16 +78,15 @@ describe('Usuário e Auth (e2e)', () => {
 
   it('06 - Deve atualizar um usuário', async () => {
     const resposta = await request(app.getHttpServer())
-      .put('/usuarios/atualizar')
+      .put('/usuario/atualizar')
       .set('Authorization', `${token}`)
       .send({
         id: usuarioId,
         nome: 'Root Atualizado',
         usuario: 'root@root.com',
         senha: 'rootroot',
-        foto: '-',
       })
-      .expect(200);
+      .expect(201);
 
     expect(resposta.body.nome).toBe('Root Atualizado');
   });

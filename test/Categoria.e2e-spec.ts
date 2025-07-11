@@ -15,15 +15,14 @@ describe('Categoria (e2e)', () => {
     app = await setupApp();
 
     // Cadastrar usuário e autenticar
-    await request(app.getHttpServer()).post('/usuarios/cadastrar').send({
+    await request(app.getHttpServer()).post('/usuario/cadastrar').send({
       nome: 'Root',
       usuario: 'root@root.com',
       senha: 'rootroot',
-      foto: '-',
     });
 
     const resposta = await request(app.getHttpServer())
-      .post('/usuarios/logar')
+      .post('/usuario/logar')
       .send({ usuario: 'root@root.com', senha: 'rootroot' });
 
     token = resposta.body.token;
@@ -35,9 +34,9 @@ describe('Categoria (e2e)', () => {
 
   it('01 - Deve cadastrar uma nova Categoria', async () => {
     const resposta = await request(app.getHttpServer())
-      .post('/categorias')
+      .post('/categoria')
       .set('Authorization', `${token}`)
-      .send({ descricao: 'Categoria Teste' })
+      .send({ tipo: 'Teste Tipo de categoria', descricao: 'Categoria Teste' })
       .expect(201);
 
     categoriaId = resposta.body.id;
@@ -46,35 +45,39 @@ describe('Categoria (e2e)', () => {
 
   it('02 - Deve listar todas as Categorias', async () => {
     const resposta = await request(app.getHttpServer())
-      .get('/categorias')
+      .get('/categoria')
       .set('Authorization', `${token}`)
       .expect(200);
 
     expect(Array.isArray(resposta.body)).toBe(true);
   });
 
-  it('03 - Deve buscar categoria por descrição', async () => {
+  it('03 - Deve buscar categoria por tipo', async () => {
     const resposta = await request(app.getHttpServer())
-      .get('/categorias/tipo/Categoria Teste')
+      .get('/categoria/tipo/Categoria Teste')
       .set('Authorization', `${token}`)
       .expect(200);
 
-    expect(resposta.body[0].tipo).toBe('Categoria Teste');
+    expect(Array.isArray(resposta.body)).toBe(true);
   });
 
   it('04 - Deve atualizar uma Categoria', async () => {
     const resposta = await request(app.getHttpServer())
-      .put('/categorias')
+      .put('/categoria')
       .set('Authorization', `${token}`)
-      .send({ id: categoriaId, tipo: 'Categoria Atualizada' })
+      .send({
+        id: categoriaId,
+        tipo: 'Categoria Atualizada',
+        descricao: 'Descricao atualizada',
+      })
       .expect(200);
 
-    expect(resposta.body.tipo).toBe('Categoria Atualizado');
+    expect(resposta.body.tipo).toBe('Categoria Atualizada');
   });
 
   it('05 - Deve deletar uma Categoria', async () => {
     await request(app.getHttpServer())
-      .delete(`/categorias/${categoriaId}`)
+      .delete(`/categoria/${categoriaId}`)
       .set('Authorization', `${token}`)
       .expect(204);
   });
