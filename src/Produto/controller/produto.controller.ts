@@ -11,6 +11,8 @@ import {
   Put,
   Query,
   UseGuards,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -57,6 +59,14 @@ export class ProdutoController {
 
   @Get('/filtrar')
   @HttpCode(HttpStatus.OK)
+  @UsePipes(
+    new ValidationPipe({
+      whitelist: false,
+      forbidNonWhitelisted: false,
+      transform: false,
+      skipMissingProperties: true,
+    }),
+  )
   filtrarProdutos(
     @Query('nome') nome?: string,
     @Query('precoAtual') precoAtual?: string,
@@ -64,12 +74,17 @@ export class ProdutoController {
     @Query('desconto') desconto?: string,
     @Query('categoriaId') categoriaId?: string,
   ) {
+    function toNumber(value?: string): number | undefined {
+      if (!value) return undefined;
+      return Number(value.replace(',', '.'));
+    }
+
     const filtro = {
-      nome: nome || undefined,
-      precoAtual: precoAtual ? Number(precoAtual) : undefined,
-      precoAnterior: precoAnterior ? Number(precoAnterior) : undefined,
-      desconto: desconto ? Number(desconto) : undefined,
-      categoriaId: categoriaId ? Number(categoriaId) : undefined,
+      nome,
+      precoAtual: toNumber(precoAtual),
+      precoAnterior: toNumber(precoAnterior),
+      desconto: toNumber(desconto),
+      categoriaId: toNumber(categoriaId),
     };
 
     return this.produtoService.filtrarProdutos(filtro);
