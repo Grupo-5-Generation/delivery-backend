@@ -9,13 +9,14 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
 import { Produto } from '../entities/produto.entity';
 import { ProdutoService } from '../services/produto.service';
-import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
 
 @ApiTags('Produto')
 @UseGuards(JwtAuthGuard)
@@ -46,6 +47,38 @@ export class ProdutoController {
   @HttpCode(HttpStatus.CREATED)
   create(@Body() produto: Produto): Promise<Produto> {
     return this.produtoService.create(produto);
+  }
+
+  @Get('/desconto-saudavel/:id')
+  @HttpCode(HttpStatus.CREATED)
+  findProdutoSaudavel(@Param('id', ParseIntPipe) id: number): Promise<Produto> {
+    return this.produtoService.findProdutoSaudavel(id);
+  }
+
+  @Get('/filtrar')
+  @HttpCode(HttpStatus.OK)
+  filtrarProdutos(
+    @Query('nome') nome?: string,
+    @Query('precoAtual') precoAtual?: string,
+    @Query('precoAnterior') precoAnterior?: string,
+    @Query('desconto') desconto?: string,
+    @Query('categoriaId') categoriaId?: string,
+  ) {
+    const filtro = {
+      nome: nome || undefined,
+      precoAtual: precoAtual ? Number(precoAtual) : undefined,
+      precoAnterior: precoAnterior ? Number(precoAnterior) : undefined,
+      desconto: desconto ? Number(desconto) : undefined,
+      categoriaId: categoriaId ? Number(categoriaId) : undefined,
+    };
+
+    return this.produtoService.filtrarProdutos(filtro);
+  }
+
+  @Get('/mais-vendidos/:limit')
+  @HttpCode(HttpStatus.OK)
+  getMaisVendidos(@Query('limit') limit = 10): Promise<Produto[]> {
+    return this.produtoService.produtosMaisVendidos(Number(limit));
   }
 
   @Put()
