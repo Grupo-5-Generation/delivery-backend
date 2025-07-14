@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CategoriaService } from 'src/categoria/services/categoria.service';
 import { UsuarioService } from 'src/usuario/services/usuario.service';
 import { DeleteResult, ILike, Repository } from 'typeorm';
-import { Produto } from '../entities/produto.entity';
+import { Produto } from '../../produto/entities/produto.entity';
 
 interface FiltroProduto {
   nome?: string;
