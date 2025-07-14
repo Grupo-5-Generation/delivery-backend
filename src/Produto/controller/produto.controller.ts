@@ -31,28 +31,12 @@ export class ProdutoController {
     return this.produtoService.findAll();
   }
 
-  @Get('/:id')
+  @Get('/mais-vendidos')
   @HttpCode(HttpStatus.OK)
-  findById(@Param('id', ParseIntPipe) id: number): Promise<Produto> {
-    return this.produtoService.findById(id);
-  }
-
-  @Get('/nome/:nome')
-  @HttpCode(HttpStatus.OK)
-  findByAllNome(@Param('nome') nome: string): Promise<Produto[]> {
-    return this.produtoService.findAllByNome(nome);
-  }
-
-  @Post()
-  @HttpCode(HttpStatus.CREATED)
-  create(@Body() produto: Produto): Promise<Produto> {
-    return this.produtoService.create(produto);
-  }
-
-  @Get('/desconto-saudavel/:id')
-  @HttpCode(HttpStatus.CREATED)
-  findProdutoSaudavel(@Param('id', ParseIntPipe) id: number): Promise<Produto> {
-    return this.produtoService.findProdutoSaudavel(id);
+  getMaisVendidos(
+    @Query('limit', ParseIntPipe) limit: number,
+  ): Promise<Produto[]> {
+    return this.produtoService.produtosMaisVendidos(Number(limit));
   }
 
   @Get('/filtrar')
@@ -75,12 +59,28 @@ export class ProdutoController {
     return this.produtoService.filtrarProdutos(filtro);
   }
 
-  @Get('/mais-vendidos/:limit')
+  @Get('/:id')
   @HttpCode(HttpStatus.OK)
-  getMaisVendidos(
-    @Param('limit', ParseIntPipe) limit: number,
-  ): Promise<Produto[]> {
-    return this.produtoService.produtosMaisVendidos(limit);
+  findById(@Param('id', ParseIntPipe) id: number): Promise<Produto> {
+    return this.produtoService.findById(id);
+  }
+
+  @Get('/nome/:nome')
+  @HttpCode(HttpStatus.OK)
+  findByAllNome(@Param('nome') nome: string): Promise<Produto[]> {
+    return this.produtoService.findAllByNome(nome);
+  }
+
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  create(@Body() produto: Produto): Promise<Produto> {
+    return this.produtoService.create(produto);
+  }
+
+  @Get('/desconto-saudavel/:id')
+  @HttpCode(HttpStatus.CREATED)
+  findProdutoSaudavel(@Param('id', ParseIntPipe) id: number): Promise<Produto> {
+    return this.produtoService.findProdutoSaudavel(id);
   }
 
   @Put()

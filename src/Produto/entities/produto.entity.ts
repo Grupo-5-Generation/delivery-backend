@@ -67,13 +67,13 @@ export class Produto {
   @Column({ nullable: false })
   status: boolean;
 
-  @ApiProperty()
+  @ApiProperty({ type: () => Categoria })
   @ManyToOne(() => Categoria, (categoria) => categoria.produto, {
     onDelete: 'CASCADE',
   })
   categoria: Categoria;
 
-  @ApiProperty()
+  @ApiProperty({ type: () => Usuario })
   @ManyToOne(() => Usuario, (usuario) => usuario.produto, {
     onDelete: 'CASCADE',
   })
