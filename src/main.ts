@@ -10,7 +10,7 @@ async function bootstrap() {
     .setTitle('Terminal Gourmet')
     .setDescription('Projeto Delivery - Turma JS-07 Generation Brasil')
     .setContact(
-      'Andressa Muniz, Douglas Ferreira, Giovanna Colombara, Giulia Barreto, Mariana Oliveira, Mateus Camargo e Ysabella Santos',
+      'Terminal Gourmet',
       'https://github.com/Grupo-5-Generation/delivery-backend',
       'grupo05.generation@gmail.com',
     )

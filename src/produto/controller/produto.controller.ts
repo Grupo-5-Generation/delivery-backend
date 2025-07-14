@@ -31,12 +31,6 @@ export class ProdutoController {
     return this.produtoService.findAll();
   }
 
-  @Get('/nome/:nome')
-  @HttpCode(HttpStatus.OK)
-  findByAllNome(@Param('nome') nome: string): Promise<Produto[]> {
-    return this.produtoService.findAllByNome(nome);
-  }
-
   @Get('/mais-vendidos')
   @HttpCode(HttpStatus.OK)
   getMaisVendidos(
@@ -71,16 +65,22 @@ export class ProdutoController {
     return this.produtoService.findById(id);
   }
 
-  @Post()
-  @HttpCode(HttpStatus.CREATED)
-  create(@Body() produto: Produto): Promise<Produto> {
-    return this.produtoService.create(produto);
-  }
-
   @Get('/desconto-saudavel/:id')
   @HttpCode(HttpStatus.CREATED)
   findProdutoSaudavel(@Param('id', ParseIntPipe) id: number): Promise<Produto> {
     return this.produtoService.findProdutoSaudavel(id);
+  }
+
+  @Get('/nome/:nome')
+  @HttpCode(HttpStatus.OK)
+  findByAllNome(@Param('nome') nome: string): Promise<Produto[]> {
+    return this.produtoService.findAllByNome(nome);
+  }
+
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  create(@Body() produto: Produto): Promise<Produto> {
+    return this.produtoService.create(produto);
   }
 
   @Put()
