@@ -31,6 +31,12 @@ export class ProdutoController {
     return this.produtoService.findAll();
   }
 
+  @Get('/nome/:nome')
+  @HttpCode(HttpStatus.OK)
+  findByAllNome(@Param('nome') nome: string): Promise<Produto[]> {
+    return this.produtoService.findAllByNome(nome);
+  }
+
   @Get('/mais-vendidos')
   @HttpCode(HttpStatus.OK)
   getMaisVendidos(
@@ -63,12 +69,6 @@ export class ProdutoController {
   @HttpCode(HttpStatus.OK)
   findById(@Param('id', ParseIntPipe) id: number): Promise<Produto> {
     return this.produtoService.findById(id);
-  }
-
-  @Get('/nome/:nome')
-  @HttpCode(HttpStatus.OK)
-  findByAllNome(@Param('nome') nome: string): Promise<Produto[]> {
-    return this.produtoService.findAllByNome(nome);
   }
 
   @Post()

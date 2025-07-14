@@ -6,11 +6,11 @@ import { DeleteResult, ILike, Repository } from 'typeorm';
 import { Produto } from '../entities/produto.entity';
 
 interface FiltroProduto {
+  nome?: string;
   precoAtual?: number;
   precoAnterior?: number;
   desconto?: number;
   categoriaId?: number;
-  nome?: string;
 }
 
 @Injectable()
