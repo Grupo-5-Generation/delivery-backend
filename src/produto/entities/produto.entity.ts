@@ -20,7 +20,6 @@ export class Produto {
   @Column({ type: 'int', nullable: false })
   quantidade: number;
 
-  @IsNotEmpty()
   @ApiProperty()
   @Column({
     precision: 19,
@@ -34,7 +33,6 @@ export class Produto {
   })
   precoAnterior: number;
 
-  @IsNotEmpty()
   @ApiProperty()
   @Column({
     precision: 19,
@@ -66,6 +64,10 @@ export class Produto {
   @ApiProperty()
   @Column({ nullable: false })
   status: boolean;
+
+  @Column({ length: 5000, nullable: true })
+  @ApiProperty()
+  foto: string;
 
   @ApiProperty({ type: () => Categoria })
   @ManyToOne(() => Categoria, (categoria) => categoria.produto, {
