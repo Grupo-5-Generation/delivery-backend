@@ -65,7 +65,7 @@ export class ProdutoController {
     return this.produtoService.findById(id);
   }
 
-  @Get('/desconto-saudavel/:id')
+  @Put('/desconto-saudavel/:id')
   @HttpCode(HttpStatus.CREATED)
   findProdutoSaudavel(@Param('id', ParseIntPipe) id: number): Promise<Produto> {
     return this.produtoService.findProdutoSaudavel(id);
